@@ -3,6 +3,8 @@ services:
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:management
+    networks:
+      - core-network
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -42,6 +44,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - ../../init:/docker-entrypoint-initdb.d
       - mysqldb_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password

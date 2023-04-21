@@ -6,13 +6,25 @@ services:
     ports:
       - "8761:8761"
     networks:
-      - core-network
+      - pre-defined-images_core-network
   api-gateway:
     container_name: api-gateway
     build: ../../api-gateway
     ports:
       - "8080:8080"
     networks:
-      - core-network
+      - pre-defined-images_core-network
     depends_on:
       - service-registry
+  config-server:
+    container_name: config-server
+    build: ../../config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - service-registry
+    networks:
+      - pre-defined-images_core-network
+networks:
+  pre-defined-images_core-network:
+    external: true
