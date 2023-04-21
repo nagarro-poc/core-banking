@@ -1,0 +1,120 @@
+version: "3"
+services:
+  service-registry:
+    container_name: service-registry
+    build: ./service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - core-ms
+  config-server:
+    container_name: config-server
+    build: ./config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - service-registry
+    networks:
+      - core-ms
+  api-gateway:
+    container_name: api-gateway
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - core-ms
+    depends_on:
+      - service-registry
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+  user-service:
+    container_name: user-service
+    build: ./user-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - service-registry
+      - mysql
+      - vault
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    networks:
+      - core-ms
+  account-service:
+    container_name: account-service
+    build: ./account-service
+    ports:
+      - "8086:8086"
+    depends_on:
+      - service-registry
+      - mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    networks:
+      - core-ms
+    environment:
+      - SPRING_PROFILES_ACTIVE=development
+  identity-service:
+    container_name: identity-service
+    build: ./identity-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - service-registry
+      - mysql
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    networks:
+      - core-ms
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    networks:
+      - core-ms
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - mdb_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+  vault:
+    image: vault:latest
+    container_name: vault
+    networks:
+      - core-ms
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: "vOU1OCs0IDS6pjr6xGKgkq9AVWhCrs4fo5dVvuK3UDk"
+      VAULT_ADDR: "http://0.0.0.0:8200"
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - "8200:8200"
+    volumes:
+      - "vault-logs:/vault/logs"
+      - "vault-file:/vault/file"
+
+networks:
+  core-ms:
+    driver: bridge
+volumes:
+  mdb_data:
+  vault-logs:
+  vault-file:
