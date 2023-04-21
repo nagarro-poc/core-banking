@@ -1,0 +1,34 @@
+server:
+  port: 8081
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+spring:
+  application:
+    name: user-service
+  cloud:
+    vault:
+      kv:
+        enabled: true
+      authentication: TOKEN
+      token: vOU1OCs0IDS6pjr6xGKgkq9AVWhCrs4fo5dVvuK3UDk
+      scheme: http
+#      host: vault
+#      port: 8200
+      uri: http://vault:8200
+  config:
+    import: vault://
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://mysql:3306/user_db?allowPublicKeyRetrieval=true
+#---------reading this property from vault
+#    username: root
+#    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver

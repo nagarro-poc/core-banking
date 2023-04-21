@@ -1,0 +1,31 @@
+server:
+  port: 2001
+account:
+  service:
+    url: http://localhost:8086/api/v1/accounts/account/
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+spring:
+  application:
+    name: Transaction-Service
+    version: 1.0
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  kafka:
+    topic:
+      name: transaction.notification
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers: localhost:9092
+  data:
+    mongodb:
+      user: admin
+      password: admin
+      authentication-database: admin
+      uri: mongodb://admin:admin@localhost:27017/transaction-db?authSource=admin

@@ -1,0 +1,19 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://writetoyoges@bitbucket.org/banking-poc/config-repo.git
+          username:
+          password:
+          clone-on-start: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true

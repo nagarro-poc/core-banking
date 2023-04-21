@@ -1,0 +1,18 @@
+version: "3"
+services:
+  service-registry:
+    container_name: service-registry
+    build: ../../service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - core-network
+  api-gateway:
+    container_name: api-gateway
+    build: ../../api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - core-network
+    depends_on:
+      - service-registry
