@@ -11,6 +11,9 @@ pipeline{
 		stage('Build') {
 
 			steps {
+				dir('scripts') {
+				cd account-service
+				}
 				sh 'docker build -t nagarropoc/account-service:latest .'
 			}
 		}
