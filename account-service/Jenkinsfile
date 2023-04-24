@@ -1,9 +1,6 @@
 pipeline{
 
-	agent any
-	tools {
-		maven
-	}	
+	agent any	
 
 	environment {
 		DOCKERHUB_CREDENTIALS=credentials('Nagarro_POC_DockerHub')
