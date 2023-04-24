@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:8
 ADD target/account-service-0.0.1-SNAPSHOT.jar account-service.jar
 EXPOSE 8086
 ENTRYPOINT ["java", "-jar", "account-service.jar"]
