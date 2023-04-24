@@ -82,6 +82,43 @@ services:
         window: 120s
     networks:
       - core-ms
+  transaction-service:
+    container_name: transaction-service
+    build: ./transaction-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      - service-registry
+      - mongodb
+      - kafka
+      - zookeeper
+      #- kafdrop
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    networks:
+      - core-ms
+  notification-service:
+    container_name: notification-service
+    build: ./notification-service
+    ports:
+      - "8088:8088"
+    depends_on:
+      - service-registry
+      - kafka
+      - zookeeper
+      #- kafdrop
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    networks:
+      - core-ms
   mysql:
     image: mysql:latest
     container_name: mysql
@@ -94,7 +131,47 @@ services:
       - mdb_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
-
+  zookeeper:
+    image: wurstmeister/zookeeper
+    networks:
+      - core-ms
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    hostname: zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOOKEEPER_CLIENT_PORT=2181
+    restart: always
+  kafka:
+    image: wurstmeister/kafka
+    networks:
+      - core-ms
+    container_name: kafka
+    links:
+      - zookeeper:zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPIC: "transaction.notification"
+      KAFKA_ADVERTISED_PORT: 9092
+    depends_on:
+      - zookeeper
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    networks:
+      - core-ms
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
   vault:
     image: vault:latest
     container_name: vault
@@ -118,3 +195,5 @@ volumes:
   mdb_data:
   vault-logs:
   vault-file:
+  mongodb_data:
+    driver: local

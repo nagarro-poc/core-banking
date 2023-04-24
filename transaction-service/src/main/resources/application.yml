@@ -1,8 +1,6 @@
 server:
-  port: 2001
-account:
-  service:
-    url: http://localhost:8086/api/v1/accounts/account/
+  port: 8087
+
 eureka:
   client:
     serviceUrl:
@@ -12,7 +10,7 @@ eureka:
 
 spring:
   application:
-    name: Transaction-Service
+    name: transaction-service
     version: 1.0
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -22,10 +20,52 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: kafka:9092
   data:
     mongodb:
-      user: admin
-      password: admin
+      user: root
+      password: password
       authentication-database: admin
-      uri: mongodb://admin:admin@localhost:27017/transaction-db?authSource=admin
+      uri: mongodb://root:password@mongodb:27017/transaction-db?authSource=admin
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    circuitbreakers:
+      enabled: true
+      #ratelimiters:
+      #enabled: true
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      register-health-indicator: true
+      sliding-window-size: 10
+      sliding-window-type: count-based
+      minimum-number-of-calls: 5
+      permitted-number-of-calls-in-half-open-state: 3
+      #max-wait-duration-in-half-open-state: 0 // 0 means infinte wait , untill all the permited calls are over
+      automatic-transition-from-open-to-half-open-enabled: true
+      wait-duration-in-open-state: 20s
+      failure-rate-threshold: 50
+      event-consumer-buffer-size: 10
+  instances:
+    accountService:
+      base-config: default
+  circuit-breaker-aspect-order: 2
+
+#resilience4j.timelimiter:
+#  configs:
+#    default:
+#      timeout-duration: 5s
+#      cancel-running-future: true
+#  instances:
+#    transactionLogs:
+#      base-config: default
+#  time-limiter-aspect-order: 1

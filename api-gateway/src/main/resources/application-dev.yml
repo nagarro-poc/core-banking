@@ -24,10 +24,20 @@ spring:
         - id: account-service
           uri: lb://account-service
           predicates:
-            - Path=/api/v1/account/**
+            - Path=/api/v1/accounts/**
           filters: AuthenticationFilter
         - id: identity-service
           uri: lb://identity-service
           predicates:
             - Path=/api/v1/auth/**
+          filters: AuthenticationFilter
+        - id: transaction-service
+          uri: lb://transaction-service
+          predicates:
+            - Path=/api/v1/transaction/**
+          filters: AuthenticationFilter
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/v1/notification/**
           filters: AuthenticationFilter

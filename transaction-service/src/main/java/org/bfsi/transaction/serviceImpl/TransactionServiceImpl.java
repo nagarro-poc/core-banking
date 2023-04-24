@@ -1,22 +1,20 @@
 package org.bfsi.transaction.serviceImpl;
 
-import org.bfsi.transaction.model.AccountEntityModel;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.bfsi.transaction.entity.TransactionEntity;
+import org.bfsi.transaction.model.AccountEntityModel;
 import org.bfsi.transaction.model.TransactionStatus;
 import org.bfsi.transaction.model.TransactionType;
 import org.bfsi.transaction.repository.TransactionRepository;
+import org.bfsi.transaction.service.AccountServiceFeignClient;
 import org.bfsi.transaction.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 
@@ -29,24 +27,23 @@ public class TransactionServiceImpl implements TransactionService {
     @Value("${spring.kafka.topic.name}")
     private String topicName;
 
-    @Value("${account.service.url}")
-    private String accountServiceUrl;
-
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
     TransactionRepository transactionRepository;
 
+    @Autowired
+    AccountServiceFeignClient accountServiceFeignClient;
+
     @Override
+    @CircuitBreaker(name = "accountService", fallbackMethod = "accountFallback")
+    //@RateLimiter(name = "accountRateLimiter", fallbackMethod = "accountFallback")
     public TransactionEntity debit(Long accountId, BigDecimal amount) {
-        RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-        HttpEntity<AccountEntityModel> entity = new HttpEntity<AccountEntityModel>(headers);
+        AccountEntityModel ae = accountServiceFeignClient.getAccountDetails(accountId);
 
-        AccountEntityModel ae = restTemplate.getForObject(accountServiceUrl + accountId, AccountEntityModel.class);
+        logger.info("Account Data Retrieved for Debit:" + ae.getBalance());
 
         TransactionEntity te = new TransactionEntity();
 
@@ -57,7 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
             ae.setBalance(ae.getBalance().subtract(amount));
         }
 
-        restTemplate.put(accountServiceUrl, ae);
+        accountServiceFeignClient.updateAccountEntity(ae);
 
         te.setTransactionType(TransactionType.DEBIT);
         te.setAccountId(accountId);
@@ -71,19 +68,16 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @CircuitBreaker(name = "accountService", fallbackMethod = "accountFallback")
     public TransactionEntity credit(Long accountId, BigDecimal amount) {
 
-        RestTemplate restTemplate = new RestTemplate();
+        AccountEntityModel ae = accountServiceFeignClient.getAccountDetails(accountId);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-        HttpEntity<AccountEntityModel> entity = new HttpEntity<AccountEntityModel>(headers);
-
-        AccountEntityModel ae = restTemplate.getForObject(accountServiceUrl + accountId, AccountEntityModel.class);
+        logger.info("Account Data Retrieved for Credit:" + ae.getBalance());
 
         ae.setBalance(ae.getBalance().add(amount));
 
-        restTemplate.put(accountServiceUrl, ae);
+        accountServiceFeignClient.updateAccountEntity(ae);
 
         TransactionEntity te = new TransactionEntity();
         te.setTransactionType(TransactionType.CREDIT);
@@ -99,8 +93,17 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void sendMessage(String message) {
+
+        logger.info("Going to Produced Kafka Msg: " + message);
         kafkaTemplate.send(topicName, message);
     }
+
+    public TransactionEntity accountFallback(Exception e) {
+        TransactionEntity te = new TransactionEntity();
+        te.setTransactionStatus(TransactionStatus.FAIL);
+        return te;
+    }
+
 }
 
 
