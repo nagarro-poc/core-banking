@@ -12,12 +12,9 @@ pipeline{
 
 			steps {
 				dir('account-service') {
-				readFile 'account-service/pom.xml'
 				sh 'mvn clean install'	
 				sh 'docker build -t nagarropoc/account-service:latest .'	
-				//cd account-service
 				}
-				//sh 'docker build -t nagarropoc/account-service:latest .'
 			}
 		}
 
