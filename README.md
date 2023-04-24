@@ -28,8 +28,8 @@
 | user-service         | 8081 |       |
 | identity-gateway     | 8082 |       |
 | account-service      | 8086 |       |
-| notification-service | 8084 |       |
-| transaction-service  | 8085 |       |
+| notification-service | 8088 |       |
+| transaction-service  | 8087 |       |
 | config server        | 8888 |       |  
 
 ---
@@ -54,4 +54,5 @@
 
 
 ## Explore Rest APIs
-@TODO add apis
+[Postman Collection
+](https://github.com/nagarro-poc/core-banking/blob/bd36cdaece3e806c9ad6795fc0959f03889c5377/postman)https://github.com/nagarro-poc/core-banking/blob/bd36cdaece3e806c9ad6795fc0959f03889c5377/postman

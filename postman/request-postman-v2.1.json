@@ -1,0 +1,495 @@
+{
+	"info": {
+		"_postman_id": "767d486d-e84d-41bd-af2d-9d1c8e1f0255",
+		"name": "BFSI_POC_Latest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26632905"
+	},
+	"item": [
+		{
+			"name": "Account-Service",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKQVZBIFBPQyIsInN1YiI6IkpXVCBUb2tlbiIsInVzZXJuYW1lIjoibWFyZ2kiLCJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzNDE2NDgsImV4cCI6MTY4MjM0MjI0OH0.Y2I9xzpFuLinAy52GPEaZXyrS75p9OnlFKhQwnUGmiA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountId\": 1,\r\n    \"accountType\": \"SAVINGS_ACCOUNT\",\r\n    \"accountStatus\": \"ACTIVE\",\r\n    \"balance\": 5000,\r\n    \"userId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/account",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "root",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "margi",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountId\": 2,\r\n    \"accountType\": \"SAVINGS_ACCOUNT\",\r\n    \"accountStatus\": \"ACTIVE\",\r\n    \"balance\":2121,\r\n    \"userId\":2\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/account/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListAllAccount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKQVZBIFBPQyIsInN1YiI6IkpXVCBUb2tlbiIsInVzZXJuYW1lIjoibWFyZ2kiLCJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzNDE2NDgsImV4cCI6MTY4MjM0MjI0OH0.Y2I9xzpFuLinAy52GPEaZXyrS75p9OnlFKhQwnUGmiA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/account",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FindById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKQVZBIFBPQyIsInN1YiI6IkpXVCBUb2tlbiIsInVzZXJuYW1lIjoibWFyZ2kiLCJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzMzYxNjksImV4cCI6MTY4MjMzNjc2OX0.qJikes1_z9gF4ltNh4s74AWy-AzNAFlaBWCKqtvSPFI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/account/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"account",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Close/Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKQVZBIFBPQyIsInN1YiI6IkpXVCBUb2tlbiIsInVzZXJuYW1lIjoibWFyZ2kiLCJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzMzYxNjksImV4cCI6MTY4MjMzNjc2OX0.qJikes1_z9gF4ltNh4s74AWy-AzNAFlaBWCKqtvSPFI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/account/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"account",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction-Service",
+			"item": [
+				{
+					"name": "Credit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKQVZBIFBPQyIsInN1YiI6IkpXVCBUb2tlbiIsInVzZXJuYW1lIjoibWFyZ2kiLCJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzNDE2NDgsImV4cCI6MTY4MjM0MjI0OH0.Y2I9xzpFuLinAy52GPEaZXyrS75p9OnlFKhQwnUGmiA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/transaction/credit/1/2500",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"credit",
+								"1",
+								"2500"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Debit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKQVZBIFBPQyIsInN1YiI6IkpXVCBUb2tlbiIsInVzZXJuYW1lIjoibWFyZ2kiLCJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzMzYxNjksImV4cCI6MTY4MjMzNjc2OX0.qJikes1_z9gF4ltNh4s74AWy-AzNAFlaBWCKqtvSPFI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/transaction/debit/1/20",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"debit",
+								"1",
+								"20"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification-Service",
+			"item": [
+				{
+					"name": "Health",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKQVZBIFBPQyIsInN1YiI6IkpXVCBUb2tlbiIsInVzZXJuYW1lIjoibWFyZ2kiLCJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4iLCJpYXQiOjE2ODIzMzkxMTQsImV4cCI6MTY4MjMzOTcxNH0.oMta7zaqLSwAum6tm_DkK9rPHm-9V9Ipkl-DoZKSzCs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Access-Control-Allow-Origin",
+								"value": "*",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/api/v1/notification/health",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"notification",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Identity-Service",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"margi\",\r\n    \"password\": \"root\",\r\n    \"roles\": [\r\n        \"ROLE_ADMIN\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login and get token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "root",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "margi",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test api for User and Admin Roles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "JSESSIONID=8A801C8DA9FE6CAE8CAEE311CFCB78B4",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/api/v1/auth/welcome",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"welcome"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test api for User Role",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "JSESSIONID=8A801C8DA9FE6CAE8CAEE311CFCB78B4",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/api/v1/auth/user",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test api for Admin Role",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "JSESSIONID=8A801C8DA9FE6CAE8CAEE311CFCB78B4",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/api/v1/auth/user",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh and get new access token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "JSESSIONID=8A801C8DA9FE6CAE8CAEE311CFCB78B4",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/api/v1/auth/refresh",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
