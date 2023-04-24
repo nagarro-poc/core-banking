@@ -7,7 +7,7 @@ spring:
     config:
       server:
         git:
-          uri: https://writetoyoges@bitbucket.org/banking-poc/config-repo.git
+          uri: https://github.com/nagarro-poc/config-repo.git
           username:
           password:
           clone-on-start: true
