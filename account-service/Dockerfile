@@ -1,11 +1,5 @@
-FROM maven:3-jdk-8-alpine AS build
-WORKDIR /opt/app
-
-COPY ./ /opt/app
-RUN mvn clean install -DskipTests
-
 FROM openjdk:17
-ADD /opt/app/target/account-service-0.0.1-SNAPSHOT.jar account-service.jar
+ADD target/account-service-0.0.1-SNAPSHOT.jar account-service.jar
 EXPOSE 8086
 ENTRYPOINT ["java", "-jar", "account-service.jar"]
 
