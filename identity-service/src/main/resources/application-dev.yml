@@ -2,7 +2,7 @@ spring:
   application:
     name: identity-service
   datasource:
-    url: jdbc:mysql://localhost:3307/auth_db
+    url: jdbc:mysql://localhost:3306/auth_db
     username: root
     password: password
   jpa:
