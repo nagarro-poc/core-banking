@@ -1,5 +1,5 @@
 server:
-  port: 2002
+  port: 8088
 eureka:
   client:
     serviceUrl:
@@ -8,9 +8,11 @@ eureka:
     register-with-eureka: true
 
 spring:
+  application:
+    name: notification-service
   kafka:
     consumer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: kafka:9092
       group-id: kafka-java-consumer
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

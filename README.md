@@ -28,8 +28,8 @@
 | user-service         | 8081 |       |
 | identity-gateway     | 8082 |       |
 | account-service      | 8086 |       |
-| notification-service | 8084 |       |
-| transaction-service  | 8085 |       |
+| notification-service | 8088 |       |
+| transaction-service  | 8087 |       |
 | config server        | 8888 |       |  
 
 ---
@@ -54,6 +54,7 @@
 
 
 ## Explore Rest APIs
+
 Open API Specification - Version 3.0.3 using Swagger
 
 1. Swagger for User services:
@@ -62,3 +63,6 @@ Open API Specification - Version 3.0.3 using Swagger
    ```http://localhost:8086/swagger-ui/index.html```
 3. Swagger for Identity services:
    ```http://localhost:8082/swagger-ui/index.html```
+
+[Postman Collection
+]
