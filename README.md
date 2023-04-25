@@ -2,7 +2,7 @@
 
 
 ### **Technology**
-*   Java 17
+*    Java 17
 *    Spring Boot 3.0.5
 *    Maven 3.9.1
 
@@ -54,5 +54,15 @@
 
 
 ## Explore Rest APIs
+
+Open API Specification - Version 3.0.3 using Swagger
+
+1. Swagger for User services:
+   ```http://localhost:8081/swagger-ui/index.html```
+2. Swagger for Account services:
+   ```http://localhost:8086/swagger-ui/index.html```
+3. Swagger for Identity services:
+   ```http://localhost:8082/swagger-ui/index.html```
+
 [Postman Collection
-](https://github.com/nagarro-poc/core-banking/blob/bd36cdaece3e806c9ad6795fc0959f03889c5377/postman)https://github.com/nagarro-poc/core-banking/blob/bd36cdaece3e806c9ad6795fc0959f03889c5377/postman
+]
