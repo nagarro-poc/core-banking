@@ -12,7 +12,6 @@ pipeline{
 
 			steps {
 				dir('account-service') {
-				cd account-service	
 				sh 'mvn clean install'	
 				sh 'docker build -t nagarropoc/account-service:latest .'	
 				}
