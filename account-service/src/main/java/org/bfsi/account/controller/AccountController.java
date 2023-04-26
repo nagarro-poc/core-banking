@@ -1,5 +1,6 @@
 package org.bfsi.account.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bfsi.account.entity.AccountEntity;
 import org.bfsi.account.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,20 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/accounts/")
+@Slf4j
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
+    @GetMapping("health")
+    public ResponseEntity<String> health() {
+        log.info("Info level log message");
+        log.debug("Debug level log message");
+        log.error("Error level log message");
+        return new ResponseEntity("OK", HttpStatus.OK);
+
+    }
     @GetMapping("account")
     public ResponseEntity<List<AccountEntity>> getAccountEntities() {
 
