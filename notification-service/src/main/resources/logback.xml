@@ -1,0 +1,76 @@
+<configuration>
+    <property name="MAX_HISTORY" value="7"/>
+    <property name="LOG_DIR" value="${LOG_DIR:-logs}"/>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+    <appender name="REQ_RESP_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/trace.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <totalSizeCap>10MB</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] - %msg%n</Pattern>
+            <immediateFlush>true</immediateFlush>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/error.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <totalSizeCap>10MB</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level - %msg%n</Pattern>
+            <immediateFlush>true</immediateFlush>
+        </encoder>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/app.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <totalSizeCap>10MB</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</Pattern>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+        </filter>
+    </appender>
+
+    <logger name="org.zalando" level="TRACE" additivity="false">
+     	<appender-ref ref="STDOUT" />
+        <appender-ref ref="REQ_RESP_LOG"/>
+    </logger>
+
+    <logger name="org.springframework" level="INFO" additivity="false">
+         <appender-ref ref="STDOUT" />
+        <appender-ref ref="ERROR_LOG"/>
+        <appender-ref ref="INFO_LOG"/>
+    </logger>
+
+    <root level="INFO">
+     	<appender-ref ref="STDOUT" />
+        <appender-ref ref="ERROR_LOG"/>
+        <appender-ref ref="INFO_LOG"/>
+    </root>
+</configuration>

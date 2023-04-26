@@ -3,6 +3,8 @@ services:
   user-service:
     container_name: user-service
     build: ../../user-service
+    volumes:
+      - ~/nagarro/user-service:/logs
     ports:
       - "8081:8081"
     networks:
@@ -10,6 +12,8 @@ services:
   account-service:
     container_name: account-service
     build: ../../account-service
+    volumes:
+      - ~/nagarro/account-service:/logs
     ports:
       - "8086:8086"
     networks:
@@ -17,6 +21,8 @@ services:
   identity-service:
     container_name: identity-service
     build: ../../identity-service
+    volumes:
+      - ~/nagarro/identity-service:/logs
     ports:
       - "8082:8082"
     networks:
@@ -24,6 +30,8 @@ services:
   transaction-service:
     container_name: transaction-service
     build: ../../transaction-service
+    volumes:
+      - ~/nagarro/transaction-service:/logs
     ports:
       - "8087:8087"
     networks:
@@ -31,6 +39,8 @@ services:
   notification-service:
     container_name: notification-service
     build: ../../notification-service
+    volumes:
+      - ~/nagarro/notification-service:/logs
     ports:
       - "8088:8088"
     networks:

@@ -3,6 +3,8 @@ services:
   service-registry:
     container_name: service-registry
     build: ../../service-registry
+    volumes:
+      - ~/nagarro/service-registry:/logs
     ports:
       - "8761:8761"
     networks:
@@ -10,6 +12,8 @@ services:
   api-gateway:
     container_name: api-gateway
     build: ../../api-gateway
+    volumes:
+      - ~/nagarro/api-gateway:/logs
     ports:
       - "8080:8080"
     networks:
@@ -19,6 +23,8 @@ services:
   config-server:
     container_name: config-server
     build: ../../config-server
+    volumes:
+      - ~/nagarro/config-server:/logs
     ports:
       - "8888:8888"
     depends_on:

@@ -30,7 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/welcome", "/api/v1/auth/login",
                         "/api/v1/auth/validate", "/api/v1/auth/admin", "/api/v1/auth/user").authenticated()
-                .requestMatchers("/api/v1/auth/register", "/api/v1/auth/refresh").permitAll()
+                .requestMatchers("/api/v1/auth/register", "/api/v1/auth/refresh",
+                        "/v3/api-docs/swagger-config", "/swagger-ui/*", "/v3/api-docs").permitAll()
                 .and().httpBasic();
 
         return http.build();
