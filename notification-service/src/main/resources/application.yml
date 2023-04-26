@@ -16,6 +16,55 @@ spring:
       group-id: kafka-java-consumer
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            value:
+              default:
+                type: 'org.bfsi.notification.model.KafkaModel'
+            type:
+              mapping: 'org.bfsi.transaction.model.KafkaModel:org.bfsi.notification.model.KafkaModel'
+            trusted:
+              packages: 'org.bfsi.transaction'
     topic:
       name: transaction.notification
+  # Redis Config
+  cache:
+    type: redis
+  redis:
+    host: redis
+    port: 6379
+
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    circuitbreakers:
+      enabled: true
+      #ratelimiters:
+      #enabled: true
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      register-health-indicator: true
+      sliding-window-size: 10
+      sliding-window-type: count-based
+      minimum-number-of-calls: 5
+      permitted-number-of-calls-in-half-open-state: 3
+      #max-wait-duration-in-half-open-state: 0 // 0 means infinte wait , untill all the permited calls are over
+      automatic-transition-from-open-to-half-open-enabled: true
+      wait-duration-in-open-state: 20s
+      failure-rate-threshold: 50
+      event-consumer-buffer-size: 10
+  instances:
+    userService:
+      base-config: default
+  circuit-breaker-aspect-order: 2

@@ -40,6 +40,7 @@ services:
       - service-registry
       - mysql
       - vault
+      - redis
     deploy:
       restart_policy:
         condition: on-failure
@@ -48,6 +49,8 @@ services:
         window: 120s
     networks:
       - core-ms
+    links:
+      - redis
   account-service:
     container_name: account-service
     build: ./account-service
@@ -110,7 +113,7 @@ services:
       - service-registry
       - kafka
       - zookeeper
-      #- kafdrop
+      - redis
     deploy:
       restart_policy:
         condition: on-failure
@@ -119,6 +122,8 @@ services:
         window: 120s
     networks:
       - core-ms
+    links:
+      - redis
   mysql:
     image: mysql:latest
     container_name: mysql
@@ -187,7 +192,19 @@ services:
     volumes:
       - "vault-logs:/vault/logs"
       - "vault-file:/vault/file"
-
+  redis:
+    image: redis
+    container_name: redis
+    hostname: redis
+    restart: always
+    networks:
+      - core-ms
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
 networks:
   core-ms:
     driver: bridge
@@ -196,4 +213,6 @@ volumes:
   vault-logs:
   vault-file:
   mongodb_data:
+    driver: local
+  redis_data:
     driver: local

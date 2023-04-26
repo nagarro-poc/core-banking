@@ -2,37 +2,47 @@ package org.bfsi.user.controller;
 
 import org.bfsi.user.entity.User;
 import org.bfsi.user.serviceImpl.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 public class UserController {
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@Autowired
-	UserServiceImpl	 userService;
-    @GetMapping()
-    public String health(){
-        return "OK";
+    @Autowired
+    UserServiceImpl userService;
+
+    @GetMapping
+    public ResponseEntity<List<User>> getList() {
+        return new ResponseEntity<List<User>>(userService.getList(), HttpStatus.OK);
     }
-    @PostMapping("/saveuser")
-    public User saveUser(@RequestBody User user) {
-    	userService.saveUser(user);
-    	return user;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+        logger.info("Inside UserController:"+id);
+        return new ResponseEntity<User>(userService.getUser(id), HttpStatus.OK);
     }
-    @GetMapping("/getuser")
-    public User getUser(@RequestParam String id){
-        return userService.getUser(Long.parseLong(id)).get();
+
+    @PostMapping
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.OK);
     }
-    
-    @PostMapping("/updateuser")
-    public User updateUser(@RequestBody User user) {
-    	userService.updateUser(user);
-    	return user;
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+        return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

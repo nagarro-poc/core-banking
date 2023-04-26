@@ -1,35 +1,63 @@
 package org.bfsi.user.serviceImpl;
 
-import java.util.Optional;
-
 import org.bfsi.user.entity.User;
 import org.bfsi.user.respository.UserRepository;
 import org.bfsi.user.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
-	@Autowired
-	UserRepository userRepository;
 
-	@Override
-	public void saveUser(User user) {
-		userRepository.save(user);
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-	}
+    @Autowired
+    UserRepository userRepository;
 
-	@Override
-	public Optional<User> getUser(long id) {
-		
-		return userRepository.findById(id);
-	}
+    @Override
+    public List<User> getList() {
+        return userRepository.findAll();
+    }
 
-	@Override
-	public User updateUser(User user) {
+    @Override
+    //@Cacheable(value = "user", key = "#id")
+    public User getUser(long id) {
+        logger.info("Calling getUser for id:" + id);
+        return userRepository.findById(id).get();
+    }
 
-		return userRepository.saveAndFlush(user);
-	}
+    @Override
+    @CachePut(value = "user", key = "#user.userId")
+    public User saveUser(User user) {
+        logger.info("Calling save for user:" + user.toString());
+        return userRepository.save(user);
+
+    }
+
+    @Override
+    @CachePut(value = "user", key = "#user.userId")
+    public User updateUser(User user) {
+        logger.info("Calling update for user:" + user.toString());
+        return userRepository.saveAndFlush(user);
+
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = "user", key = "#id")
+    })
+    public void deleteUser(Long id) {
+        logger.info("Calling Delete for userid:" + id);
+
+        userRepository.deleteById(id);
+    }
 
 }

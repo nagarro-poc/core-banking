@@ -1,15 +1,22 @@
 package org.bfsi.user.service;
 
-import java.util.Optional;
-
 import org.bfsi.user.entity.User;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface UserService {
 
-	void saveUser(User user);
-	Optional<User> getUser(long id);
-	User updateUser(User user);
-	
+    User saveUser(User user);
+
+    User getUser(long id);
+
+    List<User> getList();
+
+    User updateUser(User user);
+
+    void deleteUser(Long id);
+
+
 }

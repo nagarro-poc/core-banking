@@ -3,6 +3,7 @@ package org.bfsi.transaction.serviceImpl;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.bfsi.transaction.entity.TransactionEntity;
 import org.bfsi.transaction.model.AccountEntityModel;
+import org.bfsi.transaction.model.KafkaModel;
 import org.bfsi.transaction.model.TransactionStatus;
 import org.bfsi.transaction.model.TransactionType;
 import org.bfsi.transaction.repository.TransactionRepository;
@@ -28,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
     private String topicName;
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, KafkaModel> kafkaTemplate;
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -62,7 +63,15 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionRepository.save(te);
 
-        sendMessage("AccountId: " + accountId + " is Debited and now Balance is: " + ae.getBalance());
+        KafkaModel kafkaModel = new KafkaModel();
+        kafkaModel.setTransactionId(te.getId());
+        kafkaModel.setAccountNumber(ae.getAccountNumber());
+        kafkaModel.setBalance(ae.getBalance());
+        kafkaModel.setUserId(ae.getUserId());
+        kafkaModel.setTransactionType(te.getTransactionType());
+        kafkaModel.setAccountId(accountId);
+
+        sendMessage(kafkaModel);
 
         return te;
     }
@@ -87,15 +96,24 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionRepository.save(te);
 
-        sendMessage("AccountId: " + accountId + " is Credited with amount: " + amount);
+        KafkaModel kafkaModel = new KafkaModel();
+        kafkaModel.setTransactionId(te.getId());
+        kafkaModel.setAccountNumber(ae.getAccountNumber());
+        kafkaModel.setBalance(ae.getBalance());
+        kafkaModel.setUserId(ae.getUserId());
+        kafkaModel.setTransactionType(te.getTransactionType());
+        kafkaModel.setAccountId(accountId);
+
+        sendMessage(kafkaModel);
 
         return te;
     }
 
-    private void sendMessage(String message) {
+    private void sendMessage(KafkaModel kafkaModel) {
 
-        logger.info("Going to Produced Kafka Msg: " + message);
-        kafkaTemplate.send(topicName, message);
+        logger.info("Going to Produced Kafka Msg: " + kafkaModel.toString());
+        kafkaTemplate.send(topicName, kafkaModel);
+
     }
 
     public TransactionEntity accountFallback(Exception e) {
