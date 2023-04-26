@@ -7,11 +7,10 @@ pipeline{
 	}
 
 	stages {
-
 		stage('Build') {
-
 			steps {
 				dir('account-service') {
+				export JAVA_HOME = /home/karishmatayal/jdk-17.0.6
 				sh 'mvn clean install'	
 				sh 'docker build -t nagarropoc/account-service:latest .'	
 				}
