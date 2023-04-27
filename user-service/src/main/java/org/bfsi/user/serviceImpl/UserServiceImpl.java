@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CachePut(value = "user", key = "#user.userId")
+    //@CachePut(value = "user", key = "#user.userId")
     public User saveUser(User user) {
         logger.info("Calling save for user:" + user.toString());
         return userRepository.save(user);
@@ -43,7 +41,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CachePut(value = "user", key = "#user.userId")
+    //@CachePut(value = "user", key = "#user.userId")
+//    @Caching(evict = {
+//            @CacheEvict(value = "user", key = "#id")
+//    })
+    @CacheEvict("user")
     public User updateUser(User user) {
         logger.info("Calling update for user:" + user.toString());
         return userRepository.saveAndFlush(user);
@@ -51,9 +53,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(value = "user", key = "#id")
-    })
+//    @Caching(evict = {
+//            @CacheEvict(value = "user", key = "#id")
+//    })
     public void deleteUser(Long id) {
         logger.info("Calling Delete for userid:" + id);
 
