@@ -3,16 +3,34 @@ services:
   service-registry:
     container_name: service-registry
     build: ../../service-registry
+    volumes:
+      - ~/nagarro/service-registry:/logs
     ports:
       - "8761:8761"
     networks:
-      - core-network
+      - pre-defined-images_core-network
   api-gateway:
     container_name: api-gateway
     build: ../../api-gateway
+    volumes:
+      - ~/nagarro/api-gateway:/logs
     ports:
       - "8080:8080"
     networks:
-      - core-network
+      - pre-defined-images_core-network
     depends_on:
       - service-registry
+  config-server:
+    container_name: config-server
+    build: ../../config-server
+    volumes:
+      - ~/nagarro/config-server:/logs
+    ports:
+      - "8888:8888"
+    depends_on:
+      - service-registry
+    networks:
+      - pre-defined-images_core-network
+networks:
+  pre-defined-images_core-network:
+    external: true
