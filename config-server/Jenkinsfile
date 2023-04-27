@@ -1,0 +1,40 @@
+pipeline{
+
+	agent any	
+
+	environment {
+		DOCKERHUB_CREDENTIALS=credentials('Nagarro_POC_DockerHub')
+	}
+
+	stages {
+		stage('Build') {
+			steps {
+				dir('config-server') {
+				sh 'mvn clean install'
+				sh 'docker build -t nagarropoc/config-server:latest .'	
+				}
+			}
+		}
+
+		stage('Login') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+		stage('Push') {
+
+			steps {
+				sh 'docker push nagarropoc/config-server:latest'
+			}
+		}
+	}
+
+	post {
+		always {
+			sh 'docker logout'
+		}
+	}
+
+}
