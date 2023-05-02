@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "account-service",  path = "api/v1/accounts/")
+@FeignClient(name = "account-service", path = "/api/v1/accounts")
 //@FeignClient(value = "AccountServiceFeignClient", url = "${account.service.url}", path = "api/v1/accounts/")
 public interface AccountServiceFeignClient {
 
-    @GetMapping(value = "account/{id}")
+    @GetMapping("/{id}")
     public AccountEntityModel getAccountDetails(@PathVariable Long id);
 
-    @PutMapping("account/")
+    @PutMapping
     public AccountEntityModel updateAccountEntity(@RequestBody AccountEntityModel accountEntity);
 
 }

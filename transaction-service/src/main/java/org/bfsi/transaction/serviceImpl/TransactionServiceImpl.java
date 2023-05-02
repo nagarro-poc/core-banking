@@ -2,10 +2,7 @@ package org.bfsi.transaction.serviceImpl;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.bfsi.transaction.entity.TransactionEntity;
-import org.bfsi.transaction.model.AccountEntityModel;
-import org.bfsi.transaction.model.KafkaModel;
-import org.bfsi.transaction.model.TransactionStatus;
-import org.bfsi.transaction.model.TransactionType;
+import org.bfsi.transaction.model.*;
 import org.bfsi.transaction.repository.TransactionRepository;
 import org.bfsi.transaction.service.AccountServiceFeignClient;
 import org.bfsi.transaction.service.TransactionService;
@@ -40,11 +37,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @CircuitBreaker(name = "accountService", fallbackMethod = "accountFallback")
     //@RateLimiter(name = "accountRateLimiter", fallbackMethod = "accountFallback")
-    public TransactionEntity debit(Long accountId, BigDecimal amount) {
+    public TransactionEntity debit(TransactionDTO transactionDTO) {
+
+        Long accountId = transactionDTO.getAccountId();
+        BigDecimal amount = transactionDTO.getAmount();
 
         AccountEntityModel ae = accountServiceFeignClient.getAccountDetails(accountId);
 
-        logger.info("Account Data Retrieved for Debit:" + ae.getBalance());
+        logger.info("Account Data Retrieved for Debit:" + ae.toString());
 
         TransactionEntity te = new TransactionEntity();
 
@@ -78,11 +78,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @CircuitBreaker(name = "accountService", fallbackMethod = "accountFallback")
-    public TransactionEntity credit(Long accountId, BigDecimal amount) {
+    public TransactionEntity credit(TransactionDTO transactionDTO) {
+
+        Long accountId = transactionDTO.getAccountId();
+        BigDecimal amount = transactionDTO.getAmount();
 
         AccountEntityModel ae = accountServiceFeignClient.getAccountDetails(accountId);
 
-        logger.info("Account Data Retrieved for Credit:" + ae.getBalance());
+        logger.info("Account Data Retrieved for Credit:" + ae.toString());
 
         ae.setBalance(ae.getBalance().add(amount));
 
@@ -117,6 +120,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public TransactionEntity accountFallback(Exception e) {
+        logger.info(e.toString());
         TransactionEntity te = new TransactionEntity();
         te.setTransactionStatus(TransactionStatus.FAIL);
         return te;

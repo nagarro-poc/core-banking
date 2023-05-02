@@ -15,7 +15,7 @@ services:
     volumes:
       - ~/nagarro/api-gateway:/logs
     ports:
-      - "8080:8080"
+      - "8090:8090"
     networks:
       - pre-defined-images_core-network
     depends_on:

@@ -12,14 +12,14 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/accounts/")
+@RequestMapping("/api/v1/accounts")
 @Slf4j
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("health")
+    @GetMapping("/health")
     public ResponseEntity<String> health() {
         log.info("Info level log message");
         log.debug("Debug level log message");
@@ -27,7 +27,8 @@ public class AccountController {
         return new ResponseEntity("OK", HttpStatus.OK);
 
     }
-    @GetMapping("account")
+
+    @GetMapping
     public ResponseEntity<List<AccountEntity>> getAccountEntities() {
 
         List<AccountEntity> accountEntities = accountService.getAccountEntities();
@@ -35,7 +36,7 @@ public class AccountController {
 
     }
 
-    @GetMapping("account/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<AccountEntity> getAccountEntity(@PathVariable("id") Long id) {
 
         AccountEntity accountEntity = accountService.getAccountEntity(id);
@@ -43,7 +44,7 @@ public class AccountController {
 
     }
 
-    @PostMapping("account")
+    @PostMapping
     public ResponseEntity<AccountEntity> createAccountEntity(@RequestBody AccountEntity accountEntity) {
 
         AccountEntity b = accountService.createAccountEntity(accountEntity);
@@ -51,7 +52,7 @@ public class AccountController {
 
     }
 
-    @PutMapping("account/")
+    @PutMapping
     public ResponseEntity<AccountEntity> updateAccountEntity(@RequestBody AccountEntity accountEntity) {
 
         AccountEntity b = accountService.updateAccountEntity(accountEntity);
@@ -59,7 +60,7 @@ public class AccountController {
 
     }
 
-    @DeleteMapping("account/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAccountEntity(@PathVariable("id") Long id) {
 
         accountService.deleteAccountEntity(id);
