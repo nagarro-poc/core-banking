@@ -49,7 +49,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
   mongodb:
     image: mongo
-    container_name: mongodb
+    container_name: mongodb:4.4
     restart: always
     networks:
       - core-network

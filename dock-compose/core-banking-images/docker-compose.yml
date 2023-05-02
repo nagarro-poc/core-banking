@@ -6,7 +6,7 @@ services:
     volumes:
       - ~/nagarro/user-service:/logs
     ports:
-      - "8081:8081"
+      - "8092:8092"
     networks:
       - pre-defined-images_core-network
   account-service:
