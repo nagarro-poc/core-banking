@@ -12,59 +12,46 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/accounts/")
+@RequestMapping("/api/v1/accounts")
 @Slf4j
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("health")
+    @GetMapping("/health")
     public ResponseEntity<String> health() {
         log.info("Info level log message");
         log.debug("Debug level log message");
         log.error("Error level log message");
         return new ResponseEntity("OK", HttpStatus.OK);
-
     }
-    @GetMapping("account")
-    public ResponseEntity<List<AccountEntity>> getAccountEntities() {
 
+    @GetMapping
+    public ResponseEntity<List<AccountEntity>> getAccountEntities() {
         List<AccountEntity> accountEntities = accountService.getAccountEntities();
         return new ResponseEntity<List<AccountEntity>>(accountEntities, HttpStatus.OK);
-
     }
 
-    @GetMapping("account/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<AccountEntity> getAccountEntity(@PathVariable("id") Long id) {
-
         AccountEntity accountEntity = accountService.getAccountEntity(id);
         return new ResponseEntity<AccountEntity>(accountEntity, HttpStatus.OK);
-
     }
 
-    @PostMapping("account")
+    @PostMapping
     public ResponseEntity<AccountEntity> createAccountEntity(@RequestBody AccountEntity accountEntity) {
-
-        AccountEntity b = accountService.createAccountEntity(accountEntity);
-        return new ResponseEntity<AccountEntity>(b, HttpStatus.OK);
-
+        return new ResponseEntity<AccountEntity>(accountService.createAccountEntity(accountEntity), HttpStatus.OK);
     }
 
-    @PutMapping("account/")
+    @PutMapping
     public ResponseEntity<AccountEntity> updateAccountEntity(@RequestBody AccountEntity accountEntity) {
-
-        AccountEntity b = accountService.updateAccountEntity(accountEntity);
-        return new ResponseEntity<AccountEntity>(b, HttpStatus.OK);
-
+        return new ResponseEntity<AccountEntity>(accountService.updateAccountEntity(accountEntity), HttpStatus.OK);
     }
 
-    @DeleteMapping("account/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAccountEntity(@PathVariable("id") Long id) {
-
         accountService.deleteAccountEntity(id);
         return ResponseEntity.ok().build();
-
     }
-
 }

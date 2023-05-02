@@ -20,7 +20,7 @@ services:
     container_name: api-gateway
     build: ./api-gateway
     ports:
-      - "8080:8080"
+      - "8090:8090"
     networks:
       - core-ms
     depends_on:
@@ -35,7 +35,7 @@ services:
     container_name: user-service
     build: ./user-service
     ports:
-      - "8081:8081"
+      - "8092:8092"
     depends_on:
       - service-registry
       - mysql

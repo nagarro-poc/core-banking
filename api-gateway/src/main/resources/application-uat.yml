@@ -32,10 +32,10 @@ spring:
         - id: transaction-service
           uri: lb://transaction-service
           predicates:
-            - Path=/api/v1/transaction/**
+            - Path=/api/v1/transactions/**
           filters: AuthenticationFilter
         - id: notification-service
           uri: lb://notification-service
           predicates:
-            - Path=/api/v1/notification/**
+            - Path=/api/v1/notifications/**
           filters: AuthenticationFilter
