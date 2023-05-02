@@ -24,8 +24,8 @@
 | Tables               | Are  | to-do |
 |----------------------|:----:|------:|
 | service-registry     | 8761 |       |
-| api-gateway          | 8080 |       |
-| user-service         | 8081 |       |
+| api-gateway          | 8090 |       |
+| user-service         | 8092 |       |
 | identity-gateway     | 8082 |       |
 | account-service      | 8086 |       |
 | notification-service | 8088 |       |
@@ -38,7 +38,8 @@
 
 1. Clone the application
 
-    ```git clone https://writetoyoges@bitbucket.org/banking-poc/core-banking.git```
+    ```git clone https://github.com/nagarro-poc/core-banking.git```
+    ```git clone https://github.com/nagarro-poc/config-repo.git```
 2. build the project
 
     ```mvn clean package```
