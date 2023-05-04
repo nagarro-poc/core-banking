@@ -27,6 +27,8 @@
 		<module>service-registry</module>
 		<module>identity-service</module>
 		<module>config-server</module>
+		<module>keycloak-client</module>
+		<module>identity-resource-server</module>
 	</modules>
 	<dependencies>
 		<dependency>
